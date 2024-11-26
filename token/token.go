@@ -1,4 +1,4 @@
-package token
+package token // tokens and tokenTypes definations
 
 type TokenType string
 
