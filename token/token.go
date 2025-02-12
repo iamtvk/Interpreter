@@ -29,20 +29,22 @@ const (
 	EOF     = "EOF"
 
 	// Identifiers + literals
-	IDENT = "IDENT" // add, foobar, x, y, ...
-	INT   = "INT"   // 1343456
+	IDENT  = "IDENT" // add, foobar, x, y, ...
+	INT    = "INT"   // like 1343456
+	STRING = "STRING"
 
 	// Operators
-	ASSIGN   = "="
-	PLUS     = "+"
-	MINUS    = "-"
-	BANG     = "!"
-	ASTERISK = "*"
-	SLASH    = "/"
-	LT       = "<"
-	GT       = ">"
-	EQ       = "=="
-	NOT_EQ   = "!="
+	ASSIGN         = "="
+	PLUS           = "+"
+	INVERTED_COMMA = `"`
+	MINUS          = "-"
+	BANG           = "!"
+	ASTERISK       = "*"
+	SLASH          = "/"
+	LT             = "<"
+	GT             = ">"
+	EQ             = "=="
+	NOT_EQ         = "!="
 
 	// Delimiters
 	COMMA     = ","

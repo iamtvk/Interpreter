@@ -1,12 +1,17 @@
 package lexer
 
-import "github.com/interpreter/token"
+import (
+	"fmt"
+
+	"github.com/interpreter/token"
+)
 
 type Lexer struct {
 	input   string
 	readPos int
 	pos     int
 	ch      byte
+	errors  []string
 }
 
 func New(input string) *Lexer {
@@ -85,6 +90,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LT, l.ch)
 	case '>':
 		tok = newToken(token.GT, l.ch)
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -106,6 +114,22 @@ func (l *Lexer) NextToken() token.Token {
 
 	l.readChar()
 	return tok
+}
+
+func (l *Lexer) readString() string {
+	pos := l.pos + 1
+	for {
+		l.readChar()
+		if l.ch == '"' {
+			break
+		}
+		if l.ch == 0 {
+			msg := fmt.Sprintf("Unterminated String without '\"'")
+			l.errors = append(l.errors, msg)
+			break
+		}
+	}
+	return l.input[pos:l.pos]
 }
 
 func (l *Lexer) skipWhiteSpaces() {
@@ -138,4 +162,8 @@ func isDigit(ch byte) bool {
 
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+func (l *Lexer) Errors() []string {
+	return l.errors
 }

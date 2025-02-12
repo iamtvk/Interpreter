@@ -199,6 +199,10 @@ func TestErrorHandling(t *testing.T) {
 		expectedMessage string
 	}{
 		{
+			`"Hello" - " " - "World"`,
+			"unknown operator: STRING - STRING",
+		},
+		{
 			"5 + true",
 			"type mismatch: INTEGER + BOOLEAN",
 		},
@@ -330,4 +334,34 @@ func TestClosures(t *testing.T) {
 	addTwo(67);
 	`
 	testIntegerObject(t, testEval(input), 69)
+}
+
+func TestStringLiteral(t *testing.T) {
+	input := `"hello andi"`
+
+	evaluated := testEval(input)
+
+	str, ok := evaluated.(*object.String)
+
+	if !ok {
+		t.Fatalf("object is not String. got =%T (%+v)",
+			evaluated, evaluated)
+	}
+
+	if str.Value != "hello andi" {
+		t.Errorf("string has wrong value. got=%q", str.Value)
+	}
+}
+
+func TestStringConcat(t *testing.T) {
+	input := `"hello" + " " + "World!"`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object is not string.got=%T (%+v)", evaluated, evaluated)
+	}
+	if str.Value != "hello World!" {
+		t.Errorf("string has wrong value. got=%q", str.Value)
+	}
 }

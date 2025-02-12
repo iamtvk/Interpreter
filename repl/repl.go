@@ -25,7 +25,13 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		line := scanner.Text()
+
 		l := lexer.New(line)
+		if len(l.Errors()) != 0 {
+			printParserErrors(out, l.Errors())
+			continue
+		}
+
 		p := parser.New(l)
 
 		program := p.ParseProgram()
